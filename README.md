@@ -16,7 +16,7 @@
 1. Install _aicommits_:
 
    ```sh
-   npm install -g aicommits
+   npm install -g aiwizardcommits
    ```
 
 2. Retrieve your API key from [OpenAI](https://platform.openai.com/account/api-keys)
@@ -170,6 +170,26 @@ aicommits config set OPENAI_KEY=<your-api-key> generate=3 locale=en
 Required
 
 The OpenAI API key. You can retrieve it from [OpenAI API Keys page](https://platform.openai.com/account/api-keys).
+
+
+#### OPENAI_HOST
+Optional
+
+Specifies an alternative server address that supports the OpenAI API format. You can set this option when using other large language model service providers compatible with the OpenAI API (such as Azure OpenAI, locally deployed model servers, or other vendors compatible with the OpenAI API). 
+
+If OPENAI_HOST not specified, default use `api.openai.com`
+
+
+#### OPENAI_MODEL
+Optional
+
+Specifies the name of the OpenAI-compatible model to use. Different API providers may have different model naming conventions, and this option allows you to specify the exact model name:
+
+```shell
+aicommits config set OPENAI_MODEL=gpt-4-turbo-preview
+```
+
+This configuration takes precedence over the global model configuration and is applicable when you need to use a non-official OpenAI model name, such as custom model IDs from cloud service providers or identifiers for locally deployed models.
 
 #### locale
 
