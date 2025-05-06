@@ -32,6 +32,15 @@ const configParsers = {
 
 		return key;
 	},
+	OPENAI_HOST(host?: string) {
+		if (!host || host.length === 0) {
+			return 'api.openai.com';
+		}
+		
+		parseAssert('OPENAI_HOST', /^[a-zA-Z0-9.-]+$/.test(host), 'Must be a valid hostname');
+		
+		return host;
+	},
 	locale(locale?: string) {
 		if (!locale) {
 			return 'en';
@@ -85,7 +94,14 @@ const configParsers = {
 			return 'gpt-3.5-turbo';
 		}
 
-		return model as TiktokenModel;
+		return model;
+	},
+	OPENAI_MODEL(model?: string) {
+		if (!model || model.length === 0) {
+			return undefined;
+		}
+		
+		return model;
 	},
 	timeout(timeout?: string) {
 		if (!timeout) {

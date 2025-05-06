@@ -4,6 +4,8 @@ import type { ValidConfig } from '../../../src/utils/config.js';
 import { getDiff } from '../../utils.js';
 
 const { OPENAI_KEY } = process.env;
+const { OPENAI_HOST } = process.env;
+const { OPENAI_MODEL } = process.env;
 
 export default testSuite(({ describe }) => {
 	if (!OPENAI_KEY) {
@@ -146,7 +148,10 @@ export default testSuite(({ describe }) => {
 				config.generate,
 				config['max-length'],
 				config.type,
-				7000
+				7000,
+				undefined,
+				OPENAI_HOST,
+				OPENAI_MODEL
 			);
 
 			return commitMessages[0];

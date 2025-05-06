@@ -54,6 +54,8 @@ export default async (
 		const { env } = process;
 		const config = await getConfig({
 			OPENAI_KEY: env.OPENAI_KEY || env.OPENAI_API_KEY,
+			OPENAI_HOST: env.OPENAI_HOST || env.OPENAI_API_HOST,
+			OPENAI_MODEL: env.OPENAI_MODEL || env.OPENAI_API_MODEL,
 			proxy:
 				env.https_proxy || env.HTTPS_PROXY || env.http_proxy || env.HTTP_PROXY,
 			generate: generate?.toString(),
@@ -73,7 +75,9 @@ export default async (
 				config['max-length'],
 				config.type,
 				config.timeout,
-				config.proxy
+				config.proxy,
+				config.OPENAI_HOST,
+				config.OPENAI_MODEL
 			);
 		} finally {
 			s.stop('Changes analyzed');
