@@ -145,10 +145,6 @@ export const generateCommitMessage = async (
 	customModel?: string
 ) => {
 	try {
-		console.log('model', model);
-		console.log('customModel', customModel);
-		console.log('apiHost', apiHost);
-		console.log('apiKey', apiKey);
 		const completion = await createChatCompletion(
 			apiKey,
 			{

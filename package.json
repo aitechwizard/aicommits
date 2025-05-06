@@ -1,7 +1,7 @@
 {
-	"name": "aicommits",
+	"name": "aiwizardcommits",
 	"version": "0.0.0-semantic-release",
-	"description": "Writes your git commit messages for you with AI",
+	"description": "Writes your git commit messages for you with AI(can customize the model and api host)",
 	"keywords": [
 		"ai",
 		"git",
