@@ -19,7 +19,8 @@ const httpsPost = async (
 	headers: Record<string, string>,
 	json: unknown,
 	timeout: number,
-	proxy?: string
+	proxy?: string,
+	fullUrl?: string
 ) =>
 	new Promise<{
 		request: ClientRequest;
@@ -27,8 +28,26 @@ const httpsPost = async (
 		data: string;
 	}>((resolve, reject) => {
 		const postContent = JSON.stringify(json);
-		const request = https.request(
-			{
+		
+		// 如果提供了完整URL，解析它
+		let requestOptions: https.RequestOptions;
+		if (fullUrl) {
+			const url = new URL(fullUrl);
+			requestOptions = {
+				hostname: url.hostname,
+				port: url.port || 443,
+				path: url.pathname + url.search,
+				method: 'POST',
+				headers: {
+					...headers,
+					'Content-Type': 'application/json',
+					'Content-Length': Buffer.byteLength(postContent),
+				},
+				timeout,
+				agent: proxy ? createHttpsProxyAgent(proxy) : undefined,
+			};
+		} else {
+			requestOptions = {
 				port: 443,
 				hostname,
 				path,
@@ -40,7 +59,11 @@ const httpsPost = async (
 				},
 				timeout,
 				agent: proxy ? createHttpsProxyAgent(proxy) : undefined,
-			},
+			};
+		}
+		
+		const request = https.request(
+			requestOptions,
 			(response) => {
 				const body: Buffer[] = [];
 				response.on('data', (chunk) => body.push(chunk));
@@ -72,7 +95,8 @@ const createChatCompletion = async (
 	json: CreateChatCompletionRequest,
 	timeout: number,
 	proxy?: string,
-	apiHost?: string
+	apiHost?: string,
+	apiUrl?: string
 ) => {
 	const { response, data } = await httpsPost(
 		apiHost || 'api.openai.com',
@@ -82,7 +106,8 @@ const createChatCompletion = async (
 		},
 		json,
 		timeout,
-		proxy
+		proxy,
+		apiUrl
 	);
 
 	if (
@@ -142,7 +167,8 @@ export const generateCommitMessage = async (
 	timeout: number,
 	proxy?: string,
 	apiHost?: string,
-	customModel?: string
+	customModel?: string,
+	apiUrl?: string
 ) => {
 	try {
 		const completion = await createChatCompletion(
@@ -169,7 +195,8 @@ export const generateCommitMessage = async (
 			},
 			timeout,
 			proxy,
-			apiHost
+			apiHost,
+			apiUrl
 		);
 
 		return deduplicateMessages(
